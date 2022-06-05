@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 cars = {
-    'Ford': ['Falcon', 'Focus', 'Festiva', 'Fairlane'],
-    'Holden': ['Commodore', 'Captiva', 'Barina', 'Trailblazer'],
-    'Nissan': ['Maxima', 'Pulsar', '350Z', 'Navara'],
-    'Honda': ['Civic', 'Accord', 'Odyssey', 'Jazz'],
-    'Jeep': ['Grand Cherokee', 'Cherokee', 'Trailhawk', 'Trackhawk']
+    "Ford": ["Falcon", "Focus", "Festiva", "Fairlane"],
+    "Holden": ["Commodore", "Captiva", "Barina", "Trailblazer"],
+    "Nissan": ["Maxima", "Pulsar", "350Z", "Navara"],
+    "Honda": ["Civic", "Accord", "Odyssey", "Jazz"],
+    "Jeep": ["Grand Cherokee", "Cherokee", "Trailhawk", "Trackhawk"],
 }
 DEFAULT_SEARCH = "trail"
 CarsType = Dict[str, List[str]]
@@ -16,7 +16,8 @@ def get_all_jeeps(cars: CarsType = cars) -> str:
     Retrieve the 'Jeep' models from the cars dict and join them by a
     comma and space (', '). Leave the original ordering intact.
     """
-    pass
+    jeep_models = cars.get("Jeep")
+    return ", ".join(jeep_models)
 
 
 def get_first_model_each_manufacturer(cars: CarsType = cars) -> List[str]:
@@ -25,7 +26,7 @@ def get_first_model_each_manufacturer(cars: CarsType = cars) -> List[str]:
     manufacturer. Return the matching models in a list leaving the original
     ordering intact.
     """
-    pass
+    return [value[0] for value in cars.values()]
 
 
 def get_all_matching_models(
@@ -36,7 +37,19 @@ def get_all_matching_models(
     'grep' string which defaults to DEFAULT_SEARCH ('trail').
     Sort the resulting sequence alphabetically
     """
-    pass
+    car_models = sum(list(cars.values()), [])
+
+    for i in range(len(car_models)):
+        car_models[i] = car_models[i].lower()
+
+    print(car_models)
+
+    model_match = [model for model in car_models if model.__contains__(grep.lower())]
+
+    for i in range(len(model_match)):
+        model_match[i] = model_match[i].title()
+
+    return sorted(model_match)
 
 
 def sort_car_models(cars: CarsType = cars) -> CarsType:
@@ -44,4 +57,4 @@ def sort_car_models(cars: CarsType = cars) -> CarsType:
     Loop through the cars dict returning a new dict with the
     same keys and the values sorted alphabetically.
     """
-    pass
+    return {x: sorted(cars[x]) for x in cars.keys()}
