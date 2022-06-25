@@ -9,4 +9,10 @@ def tail(filepath: Path, n: int) -> List[str]:
     - Parse it into a list of lines, stripping trailing newlines.
     - Return the last "n" lines.
     """
-    pass
+    with open(filepath, "r") as file:
+        newline_break = []
+        for line in file:
+            line_strip = line.strip()
+            newline_break.append(line_strip)
+
+        return newline_break[-n:]
