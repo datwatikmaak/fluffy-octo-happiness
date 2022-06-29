@@ -36,16 +36,47 @@ blood_type_text = {
     "AB+": Bloodtype.AB_POS,
 }
 
+
 # complete :
 def check_bt(donor, recipient):
-    """ Checks red blood cell compatibility based on 8 blood types
-        Args:
-        donor (int | str | Bloodtype): red blood cell type of the donor
-        recipient (int | str | Bloodtype): red blood cell type of the recipient
-        Returns:
-        bool: True for compatability, False otherwise.
+    """Checks red blood cell compatibility based on 8 blood types
+    Args:
+    donor (int | str | Bloodtype): red blood cell type of the donor
+    recipient (int | str | Bloodtype): red blood cell type of the recipient
+    Returns:
+    bool: True for compatability, False otherwise.
     """
-    pass
+    # universal donor 0-
+    if donor in [Bloodtype.ZERO_NEG, "0-", 0]:
+        for i in range(8):
+            if recipient == Bloodtype(i):
+                return True
+
+    elif recipient in [Bloodtype.AB_POS, "AB+", 7]:
+        for i in range(8):
+            if donor == Bloodtype(i):
+                return True
+
+    elif donor in [Bloodtype.A_NEG, "A-", 4] and recipient in [Bloodtype.A_NEG, "A-", 4, Bloodtype.AB_NEG, "AB-", 6]:
+        return True
+
+    elif donor in [Bloodtype.B_NEG, "B-", 2] and recipient in [Bloodtype.B_POS, "B+", 3]:
+        return True
+
+    elif donor in [Bloodtype.ZERO_POS, "0+", 1] and recipient in [Bloodtype.A_POS, "A+", 5, Bloodtype.B_POS, "B+", 3]:
+        return True
+
+    elif donor in [Bloodtype.A_NEG, "A-", 4] and recipient in [Bloodtype.AB_NEG, "AB-", 6]:
+        return True
+
+    # elif donor not in blood_type_text or recipient not in blood_type_text:
+    #     raise ValueError
+    #
+    # elif donor not in range(8) or recipient not in range(8):
+    #     raise ValueError
+
+    else:
+        return False
 
 
 # hint
@@ -53,7 +84,7 @@ def _particular_antigen_comp(donor: int, recipient: int) -> tuple:
     """Returns a particalar antigen compatibility, where each tuple member
     marks a compatibility for a particular antigen  (A, B, Rh-D).
     If tuple member is non-negative there is a compatibility.
-    For red blood cell compatibility is required that 
+    For red blood cell compatibility is required that
     all tuple members are non-negative (i.e. compatibility for all 3 antigens).
     0- bloodtype is represented as 0 ; AB+ is represented as 7; see Bloodtype enum
     Examples:
