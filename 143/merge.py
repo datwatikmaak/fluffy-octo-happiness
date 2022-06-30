@@ -10,4 +10,5 @@ def get_person_age(name):
        If name in > 1 dict, return the match of the group with
        greatest N (so group3 > group2 > group1)
     """
-    pass
+    merged_dict = {**group1, **group2, **group3}
+    return merged_dict.get(str(name).lower(), NOT_FOUND)
