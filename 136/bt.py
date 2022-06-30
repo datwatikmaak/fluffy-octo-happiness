@@ -46,37 +46,36 @@ def check_bt(donor, recipient):
     Returns:
     bool: True for compatability, False otherwise.
     """
-    # universal donor 0-
-    if donor in [Bloodtype.ZERO_NEG, "0-", 0]:
-        for i in range(8):
-            if recipient == Bloodtype(i):
-                return True
+    allowed_bloodtypes = {str, int, Bloodtype}
 
-    elif recipient in [Bloodtype.AB_POS, "AB+", 7]:
-        for i in range(8):
-            if donor == Bloodtype(i):
-                return True
+    if not any(isinstance(donor, allowed) for allowed in allowed_bloodtypes):
+        raise TypeError
 
-    elif donor in [Bloodtype.A_NEG, "A-", 4] and recipient in [Bloodtype.A_NEG, "A-", 4, Bloodtype.AB_NEG, "AB-", 6]:
-        return True
+    if not any(isinstance(recipient, allowed) for allowed in allowed_bloodtypes):
+        raise TypeError
 
-    elif donor in [Bloodtype.B_NEG, "B-", 2] and recipient in [Bloodtype.B_POS, "B+", 3]:
-        return True
+    def get_blood_group_value(group):
+        try:
+            return blood_type_text[group].value
+        except KeyError:
+            pass
 
-    elif donor in [Bloodtype.ZERO_POS, "0+", 1] and recipient in [Bloodtype.A_POS, "A+", 5, Bloodtype.B_POS, "B+", 3]:
-        return True
+        if isinstance(group, Bloodtype):
+            return group.value
 
-    elif donor in [Bloodtype.A_NEG, "A-", 4] and recipient in [Bloodtype.AB_NEG, "AB-", 6]:
-        return True
+        if group not in range(0, 8):
+            raise ValueError
 
-    # elif donor not in blood_type_text or recipient not in blood_type_text:
-    #     raise ValueError
-    #
-    # elif donor not in range(8) or recipient not in range(8):
-    #     raise ValueError
+        return group
 
-    else:
-        return False
+    donor = get_blood_group_value(donor)
+    recipient = get_blood_group_value(recipient)
+
+    compatibilities = _particular_antigen_comp(donor, recipient)
+    return all(
+        compatibility >= 0
+        for compatibility in compatibilities
+    )
 
 
 # hint
